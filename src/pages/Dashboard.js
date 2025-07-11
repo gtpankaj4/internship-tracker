@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
-import { collection, addDoc, query, where, onSnapshot, orderBy, updateDoc, doc, deleteDoc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, onSnapshot, updateDoc, doc, deleteDoc, getDoc } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -13,7 +13,6 @@ function Dashboard() {
   const [deadline, setDeadline] = useState('');
   const [status, setStatus] = useState('Applied');
   const [notes, setNotes] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [internships, setInternships] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -21,8 +20,6 @@ function Dashboard() {
   const [sortBy, setSortBy] = useState('deadline-asc');
   const [userProfile, setUserProfile] = useState(null);
   const [user] = useAuthState(auth);
-  // Add a state to force re-render on theme color change
-  const [themeVersion, setThemeVersion] = useState(0);
 
   // Filter and sort internships
   const filteredAndSortedInternships = (() => {
@@ -127,7 +124,6 @@ function Dashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
     try {
       if (!user) throw new Error('User not authenticated');
       
@@ -167,7 +163,6 @@ function Dashboard() {
     } catch (err) {
       setError(err.message);
     }
-    setLoading(false);
   };
 
   // Get theme color from CSS variable (update on every render for live theme switching)
@@ -194,7 +189,7 @@ function Dashboard() {
   useEffect(() => {
     // Observe changes to the style attribute on document.documentElement
     const observer = new MutationObserver(() => {
-      setThemeVersion(v => v + 1);
+      // setThemeVersion(v => v + 1); // This line was removed
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
     return () => observer.disconnect();
