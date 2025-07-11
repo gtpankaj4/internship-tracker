@@ -2,6 +2,9 @@
   "name": "internship-tracker",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "23.x"
+  },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@testing-library/dom": "^10.4.0",
